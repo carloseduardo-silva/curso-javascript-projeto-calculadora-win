@@ -2,7 +2,7 @@ class CalcController{
 
     constructor(){
         this._operation = []
-        this._lastNumber = "";
+        this._lastNumber = " ";
         this._lastOp = "";
         this._DisplayCalcEl = document.querySelector("div#display");
 
@@ -42,10 +42,12 @@ class CalcController{
 
     clearAll(){
         this._operation = []
+        this.setLastNumberToDisplay()
     }
 
     clearEntry(){
         this._operation.pop()
+        this.setLastNumberToDisplay()
     }
 
     setError(){
@@ -67,9 +69,94 @@ class CalcController{
         this._operation[this._operation.length - 1] = value;
     }
 
+    EqualRepeatOp(){
+        console.log('equalrepeat')
+    }
+
+    PercentRepeatOp(){
+        console.log('percentrepeat')
+    }
+
     
     pushOperator(value){
+
         this._operation.push(value)
+
+        // case operator is the first element clicked in calc
+        if(this.isOperator(this._operation[0])){
+            this._operation.unshift("0")
+        }
+
+        //case = is the first element clicked in calc
+        else if(this._operation[0] == "="){
+            this.clearAll()
+        }
+
+        else if(this._operation[1] == "="){
+            if(this._lastNumber == " "){
+               this.clearAll();
+            }
+            else{
+                this.EqualRepeatOp();
+            }
+        }
+
+        else if(this._operation[1] == "%"){
+            this.PercentRepeatOp();
+        }
+
+
+
+        // normal calc 
+        else{
+
+            if(this._operation.length > 3 ){
+                this.calc()
+            }
+
+        }
+
+        
+
+    }
+
+    calc(){
+
+        if(this._operation.length > 3){
+                
+            this._lastNumber = this._operation.pop()
+    
+            }
+
+        let operationstr = this._operation.join(" ")
+        let resul = eval(operationstr)
+        
+        //case % is the forthy value clicked in the array
+        if(this._lastNumber == "%"){
+            resul = resul/100
+            this._operation = [resul]
+            
+        }
+
+        //case a operator is the forthy value clicked in the array
+        else if(this.isOperator(this._lastNumber)){
+            this._operation = [resul, this._lastNumber]
+        }
+
+        //case = is the forthy value clicked in the array
+        else{
+
+            // saving the last operation did it, case it will be necessary in the next op.
+            let lastoperation = operationstr.split(" ")
+            lastoperation.shift()
+            this._lastNumber = lastoperation.join(" ")
+
+            this._operation = [resul]
+            console.log(this._lastNumber)
+            
+        }
+        this.displayCalc = resul
+
     }
     
     addOpDot(value){
@@ -86,6 +173,11 @@ class CalcController{
                 break;
             }
         }
+
+        if(!lastNumber){
+            lastNumber = 0;
+            // refresh display to 0, from clearall() and clearEntry()
+        }
         
         this.displayCalc = lastNumber;
     }
@@ -98,17 +190,18 @@ class CalcController{
                 // when the operator is the first element added.  
                 if(this._operation.length == false){
                     this.pushOperator(value);
-                    console.log("first operator")
+                   
                 }
                 // operator after operator, will substitute the last one.
                 else{
                     this.setLastOperation(value)
+                    
                 }
             
             }
             //first number added.
             else{
-                this._operation.push(value)
+                this.pushOperator(value)
                 this.setLastNumberToDisplay()
                 
 
@@ -120,17 +213,19 @@ class CalcController{
         else{
 
             if(this.isOperator(value)){
-                this._operation.push(value)
-                console.log("operador")
+                this.pushOperator(value);
+                
+            }
+
+            else if(value == '='){
+                this.pushOperator(value);
             }
 
 
             else{
 
                 let numberconcatend = this.getLastOperation().toString() + value.toString()
-    
                 this.setLastOperation(numberconcatend)
-                console.log(numberconcatend)
                 this.setLastNumberToDisplay()
 
             }
@@ -142,7 +237,7 @@ class CalcController{
 
 
     execBtn(value){
-        console.log(value)
+       
 
         switch(value){
             case "CE":

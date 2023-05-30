@@ -53,10 +53,10 @@ class CalcController{
     }
 
     isOperator(value){
-        let operations = ["+", "-", "*", "÷", "%"]
-        if(operations.indexOf(value) > -1){
-            return true
-        }
+       
+        return(["+", "-", "*", "÷", "%"].indexOf(value) > -1)
+           
+        
     }
 
     getLastOperation(){
@@ -67,39 +67,61 @@ class CalcController{
         this._operation[this._operation.length - 1] = value;
     }
 
-    setLastNumberToDisplay(){
-        let LastNumber;
-       
-        for(let i = this._operation.lenght; i >= 0; i--){
-            if(!this.isOperator(this._operation[i])){
-                LastNumber = this._operation[i]
-                break;
-            }
-        }
-
-        this.displayCalc = LastNumber;
-    }
-
+    
     pushOperator(value){
         this._operation.push(value)
     }
-
+    
     addOpDot(value){
-
+        
     }
 
+
+    setLastNumberToDisplay(){
+        let lastNumber;
+        for(let i = this._operation.length-1; i >= 0; i--){
+
+            if(!this.isOperator(this._operation[i])){
+                lastNumber = this._operation[i]
+                break;
+            }
+        }
+        
+        this.displayCalc = lastNumber;
+    }
+    
     addOperation(value){
 
         if(isNaN(this.getLastOperation())){
-            if(this._operation.length == false){
-                this.pushOperator(value);
+            // last operation is a str(operator or =)
+            if(this.isOperator(value)){
+                // when the operator is the first element added.  
+                if(this._operation.length == false){
+                    this.pushOperator(value);
+                    console.log("first operator")
+                }
+                // operator after operator, will substitute the last one.
+                else{
+                    this.setLastOperation(value)
+                }
+            
             }
+            //first number added.
+            else{
+                this._operation.push(value)
+                this.setLastNumberToDisplay()
+                
 
+
+            }    
+            
         }
+
         else{
 
             if(this.isOperator(value)){
                 this._operation.push(value)
+                console.log("operador")
             }
 
 
@@ -109,8 +131,6 @@ class CalcController{
     
                 this.setLastOperation(numberconcatend)
                 console.log(numberconcatend)
-                this.pushOperator(value);
-
                 this.setLastNumberToDisplay()
 
             }
@@ -170,7 +190,7 @@ class CalcController{
             case "8":
             case "9":
             case "0":
-                this.addOperation(parseInt(value))
+                this.addOperation(parseInt(value).toString())
                 break
             default:
                 this.setError()

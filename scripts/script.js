@@ -42,6 +42,7 @@ class CalcController{
 
     clearAll(){
         this._operation = []
+        this._lastNumber = " "
         this.setLastNumberToDisplay()
     }
 
@@ -68,24 +69,65 @@ class CalcController{
     setLastOperation(value){
         this._operation[this._operation.length - 1] = value;
     }
+    
+    addOpDot(){
+        
+        // if be pressed . twice ou more times in a same number.
+       if(typeof this.getLastOperation() == "string" && this.getLastOperation().indexOf(".") > -1 ){
+            return;
+       }
+
+        // if . clicked right after a operator or as first value pressed.
+        if(isNaN(this.getLastOperation())){
+            this._operation.push("0.")
+            this.setLastNumberToDisplay();
+        }
+        // if . clicked right after a number
+        else{
+            let numberconcatend = this.getLastOperation() + "."
+            this.setLastOperation(numberconcatend)
+            this.setLastNumberToDisplay();
+        }
+        
+    }
 
     EqualRepeatOp(){
         // if the = be pressed in the second position, will repeat the last operation saved.
         let operation = this._operation[0] + this._lastNumber
         let resul = eval(operation)
         this._operation = [resul]
-
+        
         this.setLastNumberToDisplay();
-
+        
     }
-
+    
     PercentRepeatOp(){
+        // if the % be pressed in the second position right after an operation, will repeat the last operation saved.
         let newresul = this._operation[0]/100
         this._operation = [newresul]
-
+        
         this.setLastNumberToDisplay();
     }
-
+    
+    
+        setLastNumberToDisplay(){
+            let lastNumber;
+            for(let i = this._operation.length-1; i >= 0; i--){
+    
+                if(!this.isOperator(this._operation[i])){
+                    lastNumber = this._operation[i]
+                    break;
+                }
+            }
+    
+            if(!lastNumber){
+                lastNumber = 0;
+                // refresh display to 0, from clearall() and clearEntry()
+            }
+            
+            this.displayCalc = lastNumber;
+        }
+        
     
     pushOperator(value){
 
@@ -100,16 +142,24 @@ class CalcController{
         else if(this._operation[0] == "="){
             this.clearAll()
         }
-
+        // case = is the second element clicked in the calc
         else if(this._operation[1] == "="){
             if(this._lastNumber == " "){
-               this.clearAll();
+                this._operation.pop();
             }
             else{
                 this.EqualRepeatOp();
             }
         }
+        // case = is the third element clicked in the calc after an operator.
+        else if(this._operation[2] == "="){
+             let repeatnumber = this._operation[0]
+             this._operation.pop()
+             this._operation.push(repeatnumber)
+             this.calc()
 
+        }
+        //case % is the second element clicked in the calc
         else if(this._operation[1] == "%"){
             if(this._lastNumber ==  " "){
                 this.clearAll()
@@ -121,10 +171,10 @@ class CalcController{
         }
 
 
-
+        
         // normal calc 
         else{
-
+            
             if(this._operation.length > 3 ){
                 this.calc()
             }
@@ -174,29 +224,7 @@ class CalcController{
 
     }
     
-    addOpDot(value){
-        
-    }
 
-
-    setLastNumberToDisplay(){
-        let lastNumber;
-        for(let i = this._operation.length-1; i >= 0; i--){
-
-            if(!this.isOperator(this._operation[i])){
-                lastNumber = this._operation[i]
-                break;
-            }
-        }
-
-        if(!lastNumber){
-            lastNumber = 0;
-            // refresh display to 0, from clearall() and clearEntry()
-        }
-        
-        this.displayCalc = lastNumber;
-    }
-    
     addOperation(value){
 
         if(isNaN(this.getLastOperation())){
@@ -287,7 +315,7 @@ class CalcController{
                 break
 
             case ".":
-                this.addOpDot(".")
+                this.addOpDot()
                 break
 
             case "1":

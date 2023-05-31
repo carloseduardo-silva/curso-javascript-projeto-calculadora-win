@@ -51,6 +51,52 @@ class CalcController{
         this.setLastNumberToDisplay()
     }
 
+    excludeOperation(){
+        if(!isNaN(this.getLastOperation())){
+            if(this.getLastOperation() == ""){
+                this._operation.pop();
+            }
+
+            else if(this._lastNumber !== " "){
+                this._lastNumber = " ";
+            }
+
+            else{
+
+                let number = this.getLastOperation().toString()
+
+                let arrayNumber = number.split("")
+                
+                arrayNumber.pop()
+     
+                this.setLastOperation(arrayNumber.join(""));
+                this.setLastNumberToDisplay();
+            }
+        }
+        
+
+    }
+
+    negateOperation(){
+        if(this.getLastOperation() == undefined){
+            return;
+        }
+        
+        else if(isNaN(this.getLastOperation())){
+            let negativenumber = this._operation[0] * -1
+            
+            this._operation.push(negativenumber.toString())
+            this.setLastNumberToDisplay();
+
+        }
+        else{
+            let negativenumber = this.getLastOperation() * -1
+
+            this.setLastOperation(negativenumber.toString());
+            this.setLastNumberToDisplay();
+        }
+    }
+
     setError(){
         this.displayCalc = 'error'
     }
@@ -70,7 +116,7 @@ class CalcController{
         this._operation[this._operation.length - 1] = value;
     }
     
-    addOpDot(){
+    addDot(){
         
         // if be pressed . twice ou more times in a same number.
        if(typeof this.getLastOperation() == "string" && this.getLastOperation().indexOf(".") > -1 ){
@@ -130,6 +176,8 @@ class CalcController{
         
     
     pushOperator(value){
+
+    
 
         this._operation.push(value)
 
@@ -264,8 +312,14 @@ class CalcController{
                 this.pushOperator(value);
             }
 
+   
+
 
             else{
+                //case a count haves 0 as result, the 0 will not concatenate with the next number pressed.
+                if(this._operation[0] == 0){
+                   this._operation[0] = []
+                }
 
                 let numberconcatend = this.getLastOperation().toString() + value.toString()
                 this.setLastOperation(numberconcatend)
@@ -288,15 +342,15 @@ class CalcController{
                 break;
             case "C":
                 this.clearAll()
-                break    
+                break;    
                 
             case "+":
                 this.addOperation("+")
-                break 
+                break; 
                 
             case "-":
                 this.addOperation("-")
-                break 
+                break; 
                 
             case "*":
                 this.addOperation("*")
@@ -304,19 +358,28 @@ class CalcController{
                 
             case "÷":
                 this.addOperation("÷")
-                break
+                break;
 
             case "%":
                 this.addOperation("%")
-                break  
+                break;
                 
             case "=":
                 this.addOperation("=")
-                break
+                break;
 
             case ".":
-                this.addOpDot()
-                break
+                this.addDot()
+                break;
+            
+            case "←":
+                this.excludeOperation()
+                break;
+
+            case "±":
+                this.negateOperation()
+                break;
+
 
             case "1":
             case "2":
@@ -328,10 +391,10 @@ class CalcController{
             case "8":
             case "9":
             case "0":
-                this.addOperation(parseInt(value).toString())
-                break
+                this.addOperation(parseFloat(value).toString())
+                break;
             default:
-                this.setError()
+                this.setError();
 
         }
         

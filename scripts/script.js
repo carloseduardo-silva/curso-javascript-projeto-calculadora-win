@@ -70,11 +70,20 @@ class CalcController{
     }
 
     EqualRepeatOp(){
-        console.log('equalrepeat')
+        // if the = be pressed in the second position, will repeat the last operation saved.
+        let operation = this._operation[0] + this._lastNumber
+        let resul = eval(operation)
+        this._operation = [resul]
+
+        this.setLastNumberToDisplay();
+
     }
 
     PercentRepeatOp(){
-        console.log('percentrepeat')
+        let newresul = this._operation[0]/100
+        this._operation = [newresul]
+
+        this.setLastNumberToDisplay();
     }
 
     
@@ -102,7 +111,13 @@ class CalcController{
         }
 
         else if(this._operation[1] == "%"){
-            this.PercentRepeatOp();
+            if(this._lastNumber ==  " "){
+                this.clearAll()
+            }
+            else{
+                this.PercentRepeatOp();
+            }
+
         }
 
 
@@ -152,7 +167,7 @@ class CalcController{
             this._lastNumber = lastoperation.join(" ")
 
             this._operation = [resul]
-            console.log(this._lastNumber)
+            
             
         }
         this.displayCalc = resul

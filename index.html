@@ -7,10 +7,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Calculadora</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="node_modules/bootstrap/dist/css/bootstrap.min.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <style>
     body {
-        background-color: rgb(247, 247, 247);
+        background-color: rgb(184, 184, 184);
     }
     .center {
         position: absolute;
@@ -41,7 +42,7 @@
         background-color: #909090;
     }
     header {
-        height: 175px;
+        height: 146px;
         font-size: 36px;
         font-weight: bold;
         position: relative;
@@ -68,12 +69,67 @@
         padding-bottom: 0;
         font-size: 20px;
     }
+
+    #toggle{
+        display: flex;
+        justify-content: space-between;
+        background-color: #9a9a9a;
+        width: 65px;
+        padding: 3px 5px;
+        text-align: center;
+        border-radius: 5px
+    }
+    #toggle:hover{
+        cursor: pointer;
+    }
+    
+    .material-symbols-outlined{
+        color: white;
+       
+    }
+    #night{
+        color: black;
+    }
+
+    /* blackmode classes */
+        .black{
+            background-color: #202020;
+        }
+
+        .btn-numberBlack {
+        background-color: #4a4a4a;
+        color: white;
+        font-size: 24px;
+        padding-top: 0;
+        padding-bottom: 0;
+        font-weight: 600;
+    }
+    .btn-othersBlack {
+        background-color: #353535;
+        color: white;
+        padding-top: 0;
+        padding-bottom: 0;
+        font-size: 20px;
+    }
+
     </style>
 </head>
 <body>
     
     <div class="center">
-        <div id="calculadora">
+        
+        <div class=""  id="calculadora">
+           
+                <div id="toggle">
+                    <span id="night" class="material-symbols-outlined">
+                    dark_mode
+                    </span>
+                    <span class="material-symbols-outlined">
+                        light_mode
+                    </span>
+                </div>
+
+         
             <header>
                 <div id="display">0</div>
             </header>

@@ -40,6 +40,29 @@ class CalcController{
 
     }
 
+    darkModeToggle(){
+        let calculadora = document.getElementById("calculadora");
+
+        
+
+        if(calculadora.classList.value == "black"){
+            calculadora.style.backgroundColor = "#B1B1B1";
+            this._DisplayCalcEl.style.color = "black";
+        }
+        else{
+            calculadora.style.backgroundColor = "#202020";
+            this._DisplayCalcEl.style.color = "white";
+        }
+        
+        calculadora.classList.toggle("black")
+        document.querySelectorAll(".btn-number").forEach(el => {el.classList.toggle("btn-numberBlack")
+        })
+
+        document.querySelectorAll(".btn-others").forEach(el => {el.classList.toggle("btn-othersBlack")
+    })
+        
+    }
+
     clearAll(){
         this._operation = []
         this._lastNumber = " "
@@ -483,8 +506,8 @@ class CalcController{
 
     execBtn(value){
        
-
         switch(value){
+            
             case "CE":
                 this.clearEntry()
                 break;
@@ -555,17 +578,21 @@ class CalcController{
                 break;
 
             default:
+                console.log(value)
                 this.setError();
 
         }
         
-
-
     }
 
     InitButtonEvents(){
 
         let buttons = document.querySelectorAll("button")
+        let toggle =  document.getElementById("toggle")
+
+        this.addEventListenerAll(toggle, "click", e =>{
+            this.darkModeToggle();
+        })
 
         buttons.forEach(btn =>{
             this.addEventListenerAll(btn, 'click drag', (e) =>{

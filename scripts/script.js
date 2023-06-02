@@ -101,8 +101,11 @@ class CalcController{
         //clicado apos a operador -> repete o primeiro numbero digitado, apos a numero -> pega o ultimo e aplica
         let number;
         let squarednumber;
+        if(this.getLastOperation() == undefined){
+            return;
+        }
 
-        if(isNaN(this.getLastOperation())){
+        else if(isNaN(this.getLastOperation())){
             number = this. _operation[0]
             squarednumber = number*number
 
@@ -116,6 +119,66 @@ class CalcController{
         }
         
         this.setLastNumberToDisplay();
+
+    }
+
+    divisionOperation(){
+            let number;
+            if(this.getLastOperation() == undefined){
+                this._DisplayCalcEl.style.color = "red";
+                this._DisplayCalcEl.style.fontSize = "23px"
+                this._DisplayCalcEl.style.bottom = "10px"
+               return this.displayCalc = "Não é possivel dividir por 0";
+            }
+
+
+            else if(isNaN(this.getLastOperation())){
+
+                  number = 1/this._operation[0]
+                  this._operation.push(number.toString()) 
+                
+                }
+            else{
+
+                number = 1/this.getLastOperation();
+                this.setLastOperation(number.toString())
+                }
+                
+                this.setLastNumberToDisplay();
+
+    
+    
+    
+    
+        }
+
+
+    squareRootOperation(){
+        let number;
+        let squarenumber;
+        
+        if(this.getLastOperation() == undefined){
+            return;
+        }
+
+        else if(isNaN(this.getLastOperation())){
+
+            number = this._operation[0]
+            squarenumber = Math.sqrt(number)
+            this._operation.push(squarenumber.toString()) 
+          
+          }
+
+        else{
+
+            number = this.getLastOperation();
+            squarenumber = Math.sqrt(number)
+            this.setLastOperation(squarenumber.toString())
+            }
+            
+            this.setLastNumberToDisplay();
+
+
 
     }
 
@@ -180,6 +243,7 @@ class CalcController{
     
     setLastNumberToDisplay(){
             let lastNumber;
+            
             for(let i = this._operation.length-1; i >= 0; i--){
     
                 if(!this.isOperator(this._operation[i])){
@@ -192,32 +256,61 @@ class CalcController{
                 lastNumber = 0;
                 // refresh display to 0, from clearall() and clearEntry()
             }
-            // case the display/operation has a number with more than 11 digits will stop to concatenate other numbers to this one.
-            if(lastNumber.toString().split("").length > 11){
+
+            let numberHeight = lastNumber.toString().split("").length;
+           
+            switch(numberHeight){
+                case 12:
+                    return this._DisplayCalcEl.style.fontSize = "46px";
+
+                case 13:
+                    return this._DisplayCalcEl.style.fontSize = "44px";
+
+                case 14:
+                    return this._DisplayCalcEl.style.fontSize = "43px";
+
+                case 15:
+                    return this._DisplayCalcEl.style.fontSize = "42px";
+
+                case 16:
+                    return this._DisplayCalcEl.style.fontSize = "41px";
                 
-              
-                this._maxNumber = lastNumber.split("").pop()
+                case 17:
+                    return this._DisplayCalcEl.style.fontSize = "40px";
+                
+               
+            }
+
+         
+            
+
+            // case the display/operation has a number with more than 16 digits will stop to concatenate other numbers to this one.
+             if(numberHeight > 18){
+                
+                
+                this._maxNumber = lastNumber.toString().split("")
 
 
                 if(this._maxNumber != ""){  
                     let numberMaxArray = lastNumber.toString().split("")
                     numberMaxArray.pop()
                     let numbermax = numberMaxArray.join("")
-                    this.setLastOperation(numbermax)
+                    this.setLastOperation(numbermax.toString())
                     
-                    return console.log(this._operation) ;
+                    
+                    return;
 
                 }
 
                 else{
-
+                    
                     return this.displayCalc = this._maxNumber.join("") ;
 
                 }
-                
             }
+     
             
-           
+            this._DisplayCalcEl.style.fontSize = "48px"
             this.displayCalc = lastNumber;
         }
         
@@ -243,6 +336,7 @@ class CalcController{
                 this._operation.pop();
             }
             else{
+                
                 this.EqualRepeatOp();
             }
         }
@@ -290,6 +384,8 @@ class CalcController{
 
         let operationstr = this._operation.join(" ")
         let resul = eval(operationstr)
+
+        
         
         //case % is the forthy value clicked in the array
         if(this._lastNumber == "%"){
@@ -311,10 +407,15 @@ class CalcController{
             lastoperation.shift()
             this._lastNumber = lastoperation.join(" ")
 
-            this._operation = [resul]
+            this._operation = [resul.toString()]
             
             
         }
+        let resulstr = resul.toString()
+        if(resulstr.split("").length > 17){
+            this._DisplayCalcEl.style.fontSize = "27px"
+        }
+
         this.displayCalc = resul
 
     }
@@ -429,6 +530,14 @@ class CalcController{
 
             case "x²":
                 this.squaredOperation()
+                break;
+            
+            case "¹/x":
+                this.divisionOperation()
+                break;
+            
+            case "√":
+                this.squareRootOperation()
                 break;
 
 

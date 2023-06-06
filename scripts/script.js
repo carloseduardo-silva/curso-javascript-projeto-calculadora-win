@@ -284,53 +284,42 @@ class CalcController{
            
             switch(numberHeight){
                 case 12:
-                    return this._DisplayCalcEl.style.fontSize = "46px";
-
-                case 13:
-                    return this._DisplayCalcEl.style.fontSize = "44px";
-
-                case 14:
-                    return this._DisplayCalcEl.style.fontSize = "43px";
-
-                case 15:
+                    this.displayCalc = lastNumber
                     return this._DisplayCalcEl.style.fontSize = "42px";
 
+                case 13:
+                    this.displayCalc = lastNumber
+                    return this._DisplayCalcEl.style.fontSize = "39px";
+
+                case 14:
+                    this.displayCalc = lastNumber
+                    return this._DisplayCalcEl.style.fontSize = "37px";
+
+                case 15:
+                    this.displayCalc = lastNumber
+                    return this._DisplayCalcEl.style.fontSize = "34px";
+
                 case 16:
-                    return this._DisplayCalcEl.style.fontSize = "41px";
+                    this.displayCalc = lastNumber
+                    return this._DisplayCalcEl.style.fontSize = "31px";
                 
                 case 17:
-                    return this._DisplayCalcEl.style.fontSize = "40px";
+                    this.displayCalc = lastNumber
+                    return this._DisplayCalcEl.style.fontSize = "27px";
                 
                
             }
 
-         
+            // case the display/operation has a number with more than 17 digits will stop to concatenate other numbers to this one.
+             if(numberHeight > 17){
+                
+                let numberMaxArray = lastNumber.toString().split("")
+                numberMaxArray.pop()
+                let numbermax = numberMaxArray.join("")
+                this.setLastOperation(numbermax.toString())
+                return  this.displayCalc = lastNumber;
+            };
             
-
-            // case the display/operation has a number with more than 16 digits will stop to concatenate other numbers to this one.
-             if(numberHeight > 18){
-                
-                
-                this._maxNumber = lastNumber.toString().split("")
-
-
-                if(this._maxNumber != ""){  
-                    let numberMaxArray = lastNumber.toString().split("")
-                    numberMaxArray.pop()
-                    let numbermax = numberMaxArray.join("")
-                    this.setLastOperation(numbermax.toString())
-                    
-                    
-                    return;
-
-                }
-
-                else{
-                    
-                    return this.displayCalc = this._maxNumber.join("") ;
-
-                }
-            }
      
             
             this._DisplayCalcEl.style.fontSize = "48px"

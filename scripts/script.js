@@ -4,29 +4,132 @@ class CalcController{
         this._operation = []
         this._lastNumber = " ";
         this._lastOp = "";
-        this._DisplayCalcEl = document.querySelector("div#display");
+        this._displayCalcEl = document.querySelector("div#display");
         this._maxNumber = "";
+        
+        
         this.initialize();
         this.InitButtonEvents();
+        this.initKeyBoardEvents();
     }
 
     initialize(){
 
-
+        this.setLastNumberToDisplay()
+        this.pasteFromClipboard();
 
     }
 
     get displayCalc(){
-        return this._DisplayCalcEl.innerHTML;
+        return this._displayCalcEl.innerHTML;
 
     }
 
     set displayCalc(value){
-        return this._DisplayCalcEl.innerHTML = value;
+
+        if(value.toString().length > 17){
+            this.setError();
+            return false;
+        }
+
+       this._displayCalcEl.innerHTML = value;
 
     }
 
+    //copy and paste event using the clipboard area
+
+    pasteFromClipboard(){
+
+        document.addEventListener("paste", e =>{
+
+            //getting the value that was copy and saved in the clipboardarea of the document and assinging him to the variable "Text".
+            let text = e.clipboardData.getData('Text')
+          
+            if (isNaN(text)){
+               
+                this.displayCalc = 'invalido'
+            }
+
+            else{
+                this.displayCalc = parseFloat(text);
+            }
+        })
+
+    }
+
+    copyToClipBoard(){
+        
+        let input = document.createElement('input');
+        input.value = this.displayCalc;
+        navigator.clipboard.writeText(input.value)
+        document.body.appendChild(input);
+        input.select()
+        //document.execCommand('copy')
+
+        input.remove()
+
+    }
+
+    // keyboard events
+    initKeyBoardEvents(){
+        document.addEventListener('keyup', e => {
+            
+            //this.playAudio()
+            switch (e.key) {
+        
+                case "Escape":
+                    this.clearAll()
+                    break
+                   
+                case 'Backspace':
+                    this.clearEntry();
+                    break
+                
+                case '.':
+                case ',':    
+                    this.addDot();
+                    break
+
+                case 'Enter':
+                case '=':
+                    this.addOperation("=");
+                    break
+
+
+                case '+':
+                case '-':
+                case '*':    
+                case '/':
+                case '%':
+
+                    this.addOperation(e.key);
+                    break
+
+
+                case "0":
+                case "1":
+                case "2":
+                case "3":
+                case "4":
+                case "5":
+                case "6":
+                case "7":
+                case "8":
+                case "9":
+                    this.addOperation(parseInt(e.key));
+                    break
+
+                case "c":
+                    if (e.ctrlKey) {
+                        this.copyToClipBoard()
+                        break
+                    }
     
+              
+            }
+    })
+    }
+
     addEventListenerAll(el, events, fn){
 
         let eventoarray = events.split(" ")
@@ -47,11 +150,11 @@ class CalcController{
 
         if(calculadora.classList.value == "black"){
             calculadora.style.backgroundColor = "#B1B1B1";
-            this._DisplayCalcEl.style.color = "black";
+            this._displayCalcEl.style.color = "black";
         }
         else{
             calculadora.style.backgroundColor = "#202020";
-            this._DisplayCalcEl.style.color = "white";
+            this._displayCalcEl.style.color = "white";
         }
         
         calculadora.classList.toggle("black")
@@ -148,9 +251,9 @@ class CalcController{
     divisionOperation(){
             let number;
             if(this.getLastOperation() == undefined){
-                this._DisplayCalcEl.style.color = "red";
-                this._DisplayCalcEl.style.fontSize = "23px"
-                this._DisplayCalcEl.style.bottom = "10px"
+                this._displayCalcEl.style.color = "red";
+                this._displayCalcEl.style.fontSize = "23px"
+                this._displayCalcEl.style.bottom = "10px"
                return this.displayCalc = "Não é possivel dividir por 0";
             }
 
@@ -285,44 +388,47 @@ class CalcController{
             switch(numberHeight){
                 case 12:
                     this.displayCalc = lastNumber
-                    return this._DisplayCalcEl.style.fontSize = "42px";
+                    return this._displayCalcEl.style.fontSize = "42px";
 
                 case 13:
                     this.displayCalc = lastNumber
-                    return this._DisplayCalcEl.style.fontSize = "39px";
+                    return this._displayCalcEl.style.fontSize = "39px";
 
                 case 14:
                     this.displayCalc = lastNumber
-                    return this._DisplayCalcEl.style.fontSize = "37px";
+                    return this._displayCalcEl.style.fontSize = "37px";
 
                 case 15:
                     this.displayCalc = lastNumber
-                    return this._DisplayCalcEl.style.fontSize = "34px";
+                    return this._displayCalcEl.style.fontSize = "34px";
 
                 case 16:
                     this.displayCalc = lastNumber
-                    return this._DisplayCalcEl.style.fontSize = "31px";
+                    return this._displayCalcEl.style.fontSize = "31px";
                 
                 case 17:
                     this.displayCalc = lastNumber
-                    return this._DisplayCalcEl.style.fontSize = "27px";
+                    return this._displayCalcEl.style.fontSize = "27px";
                 
                
             }
 
             // case the display/operation has a number with more than 17 digits will stop to concatenate other numbers to this one.
+             /*
+             
              if(numberHeight > 17){
-                
-                let numberMaxArray = lastNumber.toString().split("")
-                numberMaxArray.pop()
-                let numbermax = numberMaxArray.join("")
-                this.setLastOperation(numbermax.toString())
-                return  this.displayCalc = lastNumber;
-            };
-            
+                 
+                 let numberMaxArray = lastNumber.toString().split("")
+                 numberMaxArray.pop()
+                 let numbermax = numberMaxArray.join("")
+                 this.setLastOperation(numbermax.toString())
+                 return  this.displayCalc = lastNumber;
+             };
+             
+             */
      
             
-            this._DisplayCalcEl.style.fontSize = "48px"
+            this._displayCalcEl.style.fontSize = "48px"
             this.displayCalc = lastNumber;
         }
         
@@ -425,7 +531,7 @@ class CalcController{
         }
         let resulstr = resul.toString()
         if(resulstr.split("").length > 17){
-            this._DisplayCalcEl.style.fontSize = "27px"
+            this._displayCalcEl.style.fontSize = "27px"
         }
 
         this.displayCalc = resul

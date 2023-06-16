@@ -1,12 +1,14 @@
 class CalcController{
 
     constructor(){
+
+        this._audio = new Audio('click.mp3')
         this._operation = []
         this._lastNumber = " ";
         this._lastOp = "";
         this._displayCalcEl = document.querySelector("div#display");
         this._maxNumber = "";
-        
+         this._audioMood = false
         
         this.initialize();
         this.InitButtonEvents();
@@ -17,6 +19,13 @@ class CalcController{
 
         this.setLastNumberToDisplay()
         this.pasteFromClipboard();
+
+        document.querySelectorAll("#clickSound").forEach(btn =>{
+               
+            btn.addEventListener("click", e =>{ 
+                console.log("click")
+                this.toggleAudio()})
+        })
 
     }
 
@@ -70,11 +79,30 @@ class CalcController{
 
     }
 
+    toggleAudio(){
+        /*if (this._audioMood){ this._audioMood = false;}
+    else{
+        this._audioMood = true;
+
+        ouuu usar ternario 
+    }*/
+    console.log("toggle")
+        this._audioMood = !this._audioMood;
+    }
+
+    playAudio(){
+        if(this._audioMood){
+            console.log("aplayaduo")
+            this._audio.currentTime = 0
+            this._audio.play();
+        }
+    }
+
     // keyboard events
     initKeyBoardEvents(){
         document.addEventListener('keyup', e => {
             
-            //this.playAudio()
+            this.playAudio()
             switch (e.key) {
         
                 case "Escape":
@@ -600,13 +628,14 @@ class CalcController{
 
 
     execBtn(value){
-       
+    
+        this.playAudio()
         switch(value){
-            
+
             case "CE":
                 this.clearEntry()
                 break;
-            case "C":
+            case "AC":
                 this.clearAll()
                 break;    
                 
@@ -684,10 +713,13 @@ class CalcController{
 
         let buttons = document.querySelectorAll("button")
         let toggle =  document.getElementById("toggle")
+        let clickSound = document.getElementById("clickSound")
 
         this.addEventListenerAll(toggle, "click", e =>{
             this.darkModeToggle();
         })
+
+
 
         buttons.forEach(btn =>{
             this.addEventListenerAll(btn, 'click drag', (e) =>{

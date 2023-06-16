@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="node_modules/bootstrap/dist/css/bootstrap.min.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <style>
     body {
         background-color: rgb(184, 184, 184);
@@ -137,6 +138,12 @@
     input:checked + label{
         background-color: rgba(3, 3, 3, 0.696);
     }
+
+    div#clickSound{
+        display: inline;
+        padding-right: 12rem;
+    }
+
     /* blackmode classes */
         .black{
             background-color: #202020;
@@ -166,8 +173,14 @@
         
         <div class=""  id="calculadora">
            
-              
+
                     <div id="toggle-div">
+                        <div id="clickSound">
+                            <span class="material-symbols-outlined">
+                                volume_up
+                                </span >
+                        </div>
+                           
                         <input type="checkbox" name="" id="toggle-input">
                         <label for="toggle-input" id="toggle">
                             <span id="night" class="material-symbols-outlined">
@@ -193,7 +206,7 @@
                 </div>
                 <div class="row">
                     <button type="button" class="btn btn-others col-sm">CE</button>
-                    <button type="button" class="btn btn-others col-sm">C</button>
+                    <button type="button" class="btn btn-others col-sm btn-ac">AC</button>
                     <button type="button" class="btn btn-others col-sm">←</button>
                     <button type="button" class="btn btn-others col-sm">÷</button>
                 </div>
